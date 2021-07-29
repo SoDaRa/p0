@@ -1,11 +1,11 @@
 import java.util.Scanner;
 public class TicTacToe{
     public static void main(String[] args) {
-        Board myBoard = new Board();
+        TicTacToeBoard myBoard = new TicTacToeBoard();
         Scanner my_scanner = new Scanner(System.in);
         int result = 0;
         int selection = -1;
-        Board.learnBoard();
+        TicTacToeBoard.learnBoard();
         while (myBoard.checkWin() == 0){
             while(!myBoard.markTile(selection, 1)){
                 System.out.println("Player 1: Please select a tile: ");
@@ -23,14 +23,16 @@ public class TicTacToe{
         result = myBoard.checkWin();
         if (result == 1)
             System.out.println("Player 1 Wins!!");
-        else
+        else if (result == -1)
             System.out.println("Player 2 Wins!!");
+        else
+            System.out.println("Draw!!");
         my_scanner.close();
         return;
     }
 
 }
-class Board{
+class TicTacToeBoard{
     int[] tiles = {0,0,0,0,0,0,0,0,0};
     private boolean checkTileEmpty(int tile){
         return this.tiles[tile] == 0;
@@ -52,7 +54,7 @@ class Board{
     }
     /**
      * Returns the winner if one exists. 
-     * @return 1 for X, -1 for O and 0 for no winner.
+     * @return 1 for X, -1 for O, 0 for no winner yet and -10 for draw
      */
     public int checkWin(){
         for (int i = 0; i < 8; i=i+3){
@@ -67,6 +69,12 @@ class Board{
             return this.tiles[0];
         if (this.tiles[2] != 0 && this.tiles[2] == this.tiles[4] && this.tiles[2] == this.tiles[6])
             return this.tiles[2];
+        int marked_count = 0;
+        for (int i = 0; i < 9; i++)
+            if (this.tiles[i] != 0)
+                marked_count += 1;
+        if (marked_count == 9)
+            return -10;
         return 0;
     }
     /**
