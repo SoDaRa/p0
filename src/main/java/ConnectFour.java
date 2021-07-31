@@ -7,14 +7,14 @@ public class ConnectFour{
         int selection = -1;
         while (myBoard.checkWin() == 0){
             do{
-                System.out.println("Player 1: Please select a tile: ");
+                System.out.println("Player 1: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
             }while(!myBoard.addPiece(selection, 1));
             myBoard.outputBoard();
             if (myBoard.checkWin() != 0)
                 break;
             do{
-                System.out.println("Player 2: Please select a tile: ");
+                System.out.println("Player 2: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
             }while(!myBoard.addPiece(selection, -1));
             myBoard.outputBoard();
