@@ -26,8 +26,6 @@ public class ConnectFour{
             System.out.println("Player 2 Wins!!");
         else
             System.out.println("Draw!!");
-        my_scanner.close();
-        return;
     }
 }
 class ConnectFourBoard{
@@ -204,23 +202,23 @@ class ConnectFourBoard{
      * @param y tile row
      * @return 'X' for player 1 piece, 'O' for player 2 piece, '.' for empty
      */
-    private char slotChar(int x, int y){
+    private String slotChar(int x, int y){
         int slot_val = this.slots[x][y];
         if (slot_val == -1)
-            return 'O';
+            return "O ";
         else if (slot_val == 1)
-            return 'X';
-        return '.';
+            return "X ";
+        return ". ";
     }
     /**
      * Outputs the board to the screen
      */
     public void outputBoard(){
         for (int j = 5; j > -1; j--){
-            StringBuilder printline = new StringBuilder();
-            for (int i = 0; i < 7; i++) {printline.append(this.slotChar(i,j));}
-            System.out.println(printline);
-            printline.delete(0,7);
+            StringBuilder print_line = new StringBuilder();
+            for (int i = 0; i < 7; i++) {print_line.append(this.slotChar(i,j));}
+            System.out.println(print_line);
+            print_line.delete(0,7);
         }
         return;
     }

@@ -6,17 +6,38 @@ public class TicTacToe{
         int result = 0;
         int selection = -1;
         TicTacToeBoard.learnBoard();
+        // Main game loop
         while (myBoard.checkWin() == 0){
-            while(!myBoard.markTile(selection, 1)){
-                System.out.println("Player 1: Please select a tile: ");
-                selection = my_scanner.nextInt() - 1;
+            // Player 1 Turn
+              // Request input
+            System.out.println("Player 1: Please select an open tile: ");
+              // Parse for input
+            while (my_scanner.hasNext()) {
+                // Attempt to get an int
+                if (my_scanner.hasNextInt()) {
+                    selection = my_scanner.nextInt() - 1;
+                    if (myBoard.markTile(selection, 1)) // If we can claim selection
+                        my_scanner.nextLine(); // Discard any malicious input
+                        break;
+                }
+                // Throw out garbage
+                else
+                    my_scanner.next();
             }
             myBoard.outputBoard();
             if (myBoard.checkWin() != 0)
                 break;
-            while(!myBoard.markTile(selection, -1)){
-                System.out.println("Player 2: Please select a tile: ");
-                selection = my_scanner.nextInt() - 1;
+            // Player 2 Turn
+            System.out.println("Player 2: Please select an open tile: ");
+            while (my_scanner.hasNext()) {
+                if (my_scanner.hasNextInt()) {
+                    selection = my_scanner.nextInt() - 1;
+                    if (myBoard.markTile(selection, -1))
+                        my_scanner.nextLine(); // Discard any malicious input
+                        break;
+                }
+                else
+                    my_scanner.next();
             }
             myBoard.outputBoard();
         }
@@ -27,8 +48,6 @@ public class TicTacToe{
             System.out.println("Player 2 Wins!!");
         else
             System.out.println("Draw!!");
-        my_scanner.close();
-        return;
     }
 
 }
