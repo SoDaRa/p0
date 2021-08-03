@@ -1,39 +1,100 @@
 import java.util.Scanner;
 public class ConnectFour{
     public static void main(String[] args) {
-        ConnectFourBoard myBoard = new ConnectFourBoard();
         Scanner my_scanner = new Scanner(System.in);
         int result = 0;
-        int selection = -1;
-        while (myBoard.checkWin() == 0){
+        int selection;
+        String input;
+        var rows = 6;
+        var columns = 7;
+        var connect_n = 4;
+        System.out.println("Would you like custom settings? (Y/N)");
+        my_scanner.hasNext(); // Block for input
+        input = my_scanner.nextLine();
+        if (input.equals("Y")) {
+            do {
+                System.out.println("How many tiles do you want to connect? (Default 4)");
+                my_scanner.hasNext();
+                if (my_scanner.hasNextInt())
+                    connect_n = my_scanner.nextInt();
+                else
+                    connect_n = 4;
+                my_scanner.nextLine();
+                if (connect_n <= 2)
+                    System.out.println("Connect must be > 2.");
+            } while(connect_n <= 2);
+            do {
+                System.out.println("How many rows do you want? (Default 6)");
+                my_scanner.hasNext();
+                if (my_scanner.hasNextInt())
+                    rows = my_scanner.nextInt();
+                else
+                    rows = 6;
+                my_scanner.nextLine();
+                if (rows < connect_n)
+                    System.out.println("Rows must be <= connection.");
+            }while(rows < connect_n);
+            do {
+                System.out.println("How many columns do you want? (Default 7)");
+                my_scanner.hasNext();
+                if (my_scanner.hasNextInt())
+                    columns = my_scanner.nextInt();
+                else
+                    columns = 7;
+                my_scanner.nextLine();
+                if (columns < connect_n)
+                    System.out.println("Columns must be <= connection.");
+            } while(columns < connect_n);
+        }
+
+        ConnectFourBoard myBoard = new ConnectFourBoard(rows, columns, connect_n);
+        myBoard.outputBoard();
+        myBoard.outputGuide();
+        System.out.println();
+        while (result == 0){
             do{
                 System.out.println("Player 1: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
             }while(!myBoard.addPiece(selection, 1));
+            result = myBoard.checkWin(); // Updates board first if there's a win.
             myBoard.outputBoard();
-            if (myBoard.checkWin() != 0)
+            if (result != 0)
                 break;
             do{
                 System.out.println("Player 2: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
             }while(!myBoard.addPiece(selection, -1));
+            result = myBoard.checkWin();
             myBoard.outputBoard();
         }
-        result = myBoard.checkWin();
-        if (result == 1)
+        if (result == 2)
             System.out.println("Player 1 Wins!!");
-        else if(result == -1)
+        else if(result == -2)
             System.out.println("Player 2 Wins!!");
         else
             System.out.println("Draw!!");
     }
 }
 class ConnectFourBoard{
-    int[][] slots = new int[7][6];
-    boolean[][][] check_again = new boolean[7][6][4];
-    public ConnectFourBoard() {
-        for (int i = 0; i < 7; i++){
-            for (int j = 0; j < 6; j++){
+    int rows;
+    int columns;
+    int[][] slots;
+    boolean[][][] check_again;
+    int connect_n;
+    /**
+     * Initializes the Board
+     * @param rows The Y height of the board
+     * @param columns The X length of the board
+     * @param connect_n How long a connection can be. Should be <= min(rows, columns)
+     */
+    public ConnectFourBoard(int rows, int columns, int connect_n) {
+        this.rows = rows;
+        this.columns = columns;
+        this.slots = new int[columns][rows];
+        this.check_again = new boolean[columns][rows][4];
+        this.connect_n = connect_n;
+        for (int i = 0; i < columns; i++){
+            for (int j = 0; j < rows; j++){
                 this.slots[i][j] = 0;
                 for (int k = 0; k < 4; k++)
                     this.check_again[i][j][k] = true;
@@ -47,7 +108,7 @@ class ConnectFourBoard{
      * @return The y position of the first empty slot or -1 for full column
      */
     private int getFirstEmpty(int x){
-        for (int j = 0; j < 6; j++){
+        for (int j = 0; j < this.rows; j++){
             if (this.slots[x][j] == 0)
                 return j;
         }
@@ -55,14 +116,16 @@ class ConnectFourBoard{
     }
     /**
      * Marks a tile on the board to a player
-     * @param tile The tile to update
+     * @param x The column to update
      * @param mark The player to mark the tile as
      * @return True if successful. Otherwise False
      */
     public boolean addPiece(int x, int mark){
-        if (x < 0 || x > 6)
+        // Prevent illegal access
+        if (x < 0 || x >= this.columns)
             return false;
         int y = this.getFirstEmpty(x);
+        // If can't find a spot, report it
         if (y == -1){
             return false;
         }
@@ -71,31 +134,37 @@ class ConnectFourBoard{
     }
     /**
      * Returns the winner if one exists.
-     * @return 1 for player 1, -1 for player 2 and 0 for no winner yet, and -10 draw
+     * @return 2 for player 1, -2 for player 2 and 0 for no winner yet, and -10 draw
+     * This could likely be optimized by only checking slots surrounding the last entered
+     * column. But then draw detection would likely have to be its own function. And likely
+     * best to just run both together for now.
      */
     public int checkWin(){
-        int dud_tiles = 0; // How many tiles that cannot be won off of. If reaches 33, then it's over
-        // Check tiles (0,0) through (6,2)
-        for (int i = 0; i < 7; i++){
-            for (int j = 0; j < 3; j++){
+        int count = 0;     // Counts how many tiles are checked
+        int dud_tiles = 0; // How many tiles that cannot be won off of. If equal to count at end, then it's over
+        // Check tiles below max vertical connection
+        for (int i = 0; i < this.columns; i++){
+            for (int j = 0; j < (this.rows - this.connect_n + 1); j++){
                 int result = this.checkTileForWin(i, j);
-                if (result == 1 || result == -1)
+                count += 1;
+                if (result == 2 || result == -2)
                     return result;
                 else if(result == -10)
                     dud_tiles += 1;
             }
         }
-        // Check tiles (0,3) through (3,5)
-        for (int i = 0; i < 4; i++){
-            for (int j = 3; j < 6; j++){
+        // Check tiles above max vertical connection and left of max horizontal connection
+        for (int i = 0; i < (this.columns - this.connect_n + 1); i++){
+            for (int j = this.rows - this.connect_n + 1; j < this.rows; j++){
                 int result = this.checkTileForWin(i, j);
-                if (result == 1 || result == -1)
+                count += 1;
+                if (result == 2 || result == -2)
                     return result;
                 else if(result == -10)
                     dud_tiles += 1;
             }
         }
-        if (dud_tiles == 33)
+        if (dud_tiles == count)
             return -10;
         return 0;
     }
@@ -108,86 +177,135 @@ class ConnectFourBoard{
      * @return 1 or -1 if there's a win. -10 if no win possible. 0 for undetermined
      */
     private int checkTileForWin(int x, int y){
-        // Horizontal Check12
-        if (x < 4) {
-            if (this.check_again[x][y][0]) {
-                if (this.slots[x][y] == this.slots[x + 1][y] &&
-                        this.slots[x][y] == this.slots[x + 2][y] &&
-                        this.slots[x][y] == this.slots[x + 3][y])
-                    return this.slots[x][y];
-                // Check if any slots in area are still empty
-                outer_one:
-                for (int i = 0; i < 4; i++) {
-                    for (int j = i; j < 4; j++)
-                        if (this.slots[x+i][y] != this.slots[x+j][y] && this.slots[x+i][y] != 0 && this.slots[x+j][y] != 0) {
-                            this.check_again[x][y][0] = false;
-                            break outer_one;
-                        }
-                }
+        var horizontal_possible = (x <= (this.columns - this.connect_n));
+        var vertical_possible = (y <= (this.rows - this.connect_n));
+        var upright_possible = (vertical_possible && horizontal_possible);
+        var upleft_possible = (vertical_possible && (x >= this.connect_n - 1));
+        // Horizontal Check
+        if ( this.check_again[x][y][0] && horizontal_possible ) {
+            int win_count = 0; // Counts how many checks succeed
+            var has_p1 = false;// Whether player 1 has a tile in this check
+            var has_p2 = false;// Whether player 2 has a tile in this check
+            for (int i = 0; i < this.connect_n; i++) {
+                if (this.slots[x][y] == this.slots[x+i][y] && this.slots[x][y] != 0)
+                    win_count += 1;
+                if (this.slots[x+i][y] == 1)
+                    has_p1 = true;
+                else if(this.slots[x+i][y] == -1)
+                    has_p2 = true;
             }
+            if (win_count == this.connect_n){
+                // Since we're winning, we're going to mark the board which connection won it before returning
+                // If Player 1 winning, we'll mark 2, otherwise we'll mark -2
+                var mark = 2;
+                if (this.slots[x][y] == -1)
+                    mark = -2;
+                for (int i = 0; i < this.connect_n; i++){
+                    this.slots[x+i][y] = mark;
+                }
+                return this.slots[x][y];
+            }
+            // If p1 and p2 both in this check, then no possible win here.
+            if (has_p1 && has_p2)
+                this.check_again[x][y][0] = false;
         }
-        else
+        else if ( this.check_again[x][y][0] && !horizontal_possible )
             this.check_again[x][y][0] = false;
+
         // Vertical Check
-        if (y < 3){
-            if (this.check_again[x][y][1]) {
-                if (this.slots[x][y] == this.slots[x][y + 1] &&
-                        this.slots[x][y] == this.slots[x][y + 2] &&
-                        this.slots[x][y] == this.slots[x][y + 3])
-                    return this.slots[x][y];
-                // Check if any slots in area are still empty
-                outer_two:
-                for (int i = 0; i < 4; i++) {
-                    for (int j = i; j < 4; j++)
-                        if (this.slots[x][y + i] != this.slots[x][y + j] && this.slots[x][y + i] != 0 && this.slots[x][y + j] != 0) {
-                            this.check_again[x][y][1] = false;
-                            break outer_two;
-                        }
-                }
+        if (this.check_again[x][y][1] && vertical_possible ){
+            int win_count = 0;
+            var has_p1 = false;
+            var has_p2 = false;
+            for (int j = 0; j < this.connect_n; j++) {
+                if (this.slots[x][y] == this.slots[x][y+j] && this.slots[x][y] != 0)
+                    win_count += 1;
+
+                if (this.slots[x][y+j] == 1)
+                    has_p1 = true;
+                else if(this.slots[x][y+j] == -1)
+                    has_p2 = true;
+                // Since there can't be any more vertically
+                else if (this.slots[x][y] == 0)
+                    break;
             }
+            if (win_count == this.connect_n){
+                // Since we're winning, we're going to mark the board which connection won it before returning
+                // If Player 1 winning, we'll mark 2, otherwise we'll mark -2
+                var mark = 2;
+                if (this.slots[x][y] == -1)
+                    mark = -2;
+                for (int j = 0; j < this.connect_n; j++){
+                    this.slots[x][y+j] = mark;
+                }
+                return this.slots[x][y];
+            }
+            if (has_p1 && has_p2)
+                this.check_again[x][y][1] = false;
         }
-        else
+        else if ( this.check_again[x][y][1] && !vertical_possible )
             this.check_again[x][y][1] = false;
+
         // UpRight Check
-        if (y < 3 && x < 4){
-            if (this.check_again[x][y][2]) {
-                if (this.slots[x][y] == this.slots[x + 1][y + 1] &&
-                        this.slots[x][y] == this.slots[x + 2][y + 2] &&
-                        this.slots[x][y] == this.slots[x + 3][y + 3])
-                    return this.slots[x][y];
-                // Check if any slots in area are still empty
-                outer_three:
-                for (int i = 0; i < 4; i++) {
-                    for (int j = i; j < 4; j++)
-                        if (this.slots[x+i][y + i] != this.slots[x+j][y + j] && this.slots[x+i][y + i] != 0 && this.slots[x+j][y + j] != 0) {
-                            this.check_again[x][y][2] = false;
-                            break outer_three;
-                        }
-                }
+        if (this.check_again[x][y][2] && upright_possible ){
+            int win_count = 0;
+            var has_p1 = false;
+            var has_p2 = false;
+            for (int k = 0; k < this.connect_n; k++) {
+                if (this.slots[x][y] == this.slots[x+k][y+k] && this.slots[x][y] != 0)
+                    win_count += 1;
+                if (this.slots[x+k][y+k] == 1)
+                    has_p1 = true;
+                else if(this.slots[x+k][y+k] == -1)
+                    has_p2 = true;
             }
+            if (win_count == this.connect_n){
+                // Since we're winning, we're going to mark the board which connection won it before returning
+                // If Player 1 winning, we'll mark 2, otherwise we'll mark -2
+                var mark = 2;
+                if (this.slots[x][y] == -1)
+                    mark = -2;
+                for (int k = 0; k < this.connect_n; k++){
+                    this.slots[x+k][y+k] = mark;
+                }
+                return this.slots[x][y];
+            }
+            if (has_p1 && has_p2)
+                this.check_again[x][y][2] = false;
         }
-        else
+        else if (this.check_again[x][y][2] && !upright_possible )
             this.check_again[x][y][2] = false;
+
         // Up Left Check
-        if (y < 3 && x > 2){
-            if (this.check_again[x][y][3]) {
-                if (this.slots[x][y] == this.slots[x - 1][y + 1] &&
-                        this.slots[x][y] == this.slots[x - 2][y + 2] &&
-                        this.slots[x][y] == this.slots[x - 3][y + 3])
-                    return this.slots[x][y];
-                // Check if any slots in area are still empty
-                outer_four:
-                for (int i = 0; i < 4; i++) {
-                    for (int j = i; j < 4; j++)
-                        if (this.slots[x-i][y + i] != this.slots[x-j][y + j] && this.slots[x-i][y + i] != 0 && this.slots[x-j][y + j] != 0) {
-                            this.check_again[x][y][3] = false;
-                            break outer_four;
-                        }
-                }
+        if (this.check_again[x][y][3] && upleft_possible){
+            int win_count = 0;
+            var has_p1 = false;
+            var has_p2 = false;
+            for (int k = 0; k < this.connect_n; k++) {
+                if (this.slots[x][y] == this.slots[x-k][y+k] && this.slots[x][y] != 0)
+                    win_count += 1;
+                if (this.slots[x-k][y+k] == 1)
+                    has_p1 = true;
+                else if(this.slots[x-k][y+k] == -1)
+                    has_p2 = true;
             }
+            if (win_count == this.connect_n){
+                // Since we're winning, we're going to mark the board which connection won it before returning
+                // If Player 1 winning, we'll mark 2, otherwise we'll mark -2
+                var mark = 2;
+                if (this.slots[x][y] == -1)
+                    mark = -2;
+                for (int k = 0; k < this.connect_n; k++){
+                    this.slots[x-k][y+k] = mark;
+                }
+                return this.slots[x][y];
+            }
+            if (has_p1 && has_p2)
+                this.check_again[x][y][3] = false;
         }
-        else
+        else if (this.check_again[x][y][3] && !upleft_possible)
             this.check_again[x][y][3] = false;
+
         // If we made it down here, then there is no winner this tile can see.
         // So instead return if there is no possible win on this tile.
         for (int k = 0; k < 4; k++)
@@ -204,22 +322,34 @@ class ConnectFourBoard{
      */
     private String slotChar(int x, int y){
         int slot_val = this.slots[x][y];
-        if (slot_val == -1)
-            return "O ";
-        else if (slot_val == 1)
-            return "X ";
-        return ". ";
+        switch (slot_val){
+            case -1:
+                return "O ";
+            case 1:
+                return "X ";
+            case -2:
+                return "O<";
+            case 2:
+                return "X<";
+            default:
+                return ". ";
+        }
     }
     /**
      * Outputs the board to the screen
      */
     public void outputBoard(){
-        for (int j = 5; j > -1; j--){
-            StringBuilder print_line = new StringBuilder();
-            for (int i = 0; i < 7; i++) {print_line.append(this.slotChar(i,j));}
+        StringBuilder print_line = new StringBuilder();
+        for (int j = this.rows - 1; j > -1; j--){
+            for (int i = 0; i < this.columns; i++) {print_line.append(this.slotChar(i,j));}
             System.out.println(print_line);
-            print_line.delete(0,7);
+            print_line.delete(0,this.columns*2);
         }
         return;
+    }
+
+    public void outputGuide(){
+        for (int i = 1; i <= this.columns; i++)
+            System.out.print(i + " ");
     }
 }
