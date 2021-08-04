@@ -15,7 +15,7 @@ public class SmallGameBotCLI {
         System.out.println("Hello and thank you for running Small Name Bot.");
         // Main Loop
         while (continue_flag) {
-            System.out.println("Currently we have TicTacToe and ConnectFour.");
+            System.out.println("Currently we have TicTacToe, ConnectFour and Battleship.");
             System.out.println("Which would you like to play? (Enter 'quit' to leave app)");
             input = my_scanner.nextLine();
             switch (input){
