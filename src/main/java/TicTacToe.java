@@ -63,11 +63,8 @@ class TicTacToeBoard{
      * @return True if successful. Otherwise False
      */
     public boolean markTile(int tile, int mark){
-        if (tile < 0 || tile > 8)
+        if (tile < 0 || tile > 8 || !this.checkTileEmpty(tile))
             return false;
-        if (!this.checkTileEmpty(tile)){            
-            return false;
-        }
         this.tiles[tile] = mark;
         return true;
     }
@@ -76,18 +73,22 @@ class TicTacToeBoard{
      * @return 1 for X, -1 for O, 0 for no winner yet and -10 for draw
      */
     public int checkWin(){
+        // Vertical check
         for (int i = 0; i < 8; i=i+3){
             if (this.tiles[i] != 0 && this.tiles[i] == this.tiles[i+1] && this.tiles[i] == this.tiles[i+2])
                 return this.tiles[i];
         }
+        // Horizontal Check
         for (int i = 0; i < 3; i++){
             if (this.tiles[i] != 0 && this.tiles[i] == this.tiles[i+3] && this.tiles[i] == this.tiles[i+6])
                 return this.tiles[i];
         }
+        // Diagonals
         if (this.tiles[0] != 0 && this.tiles[0] == this.tiles[4] && this.tiles[0] == this.tiles[8])
             return this.tiles[0];
         if (this.tiles[2] != 0 && this.tiles[2] == this.tiles[4] && this.tiles[2] == this.tiles[6])
             return this.tiles[2];
+        // Draw detection
         int marked_count = 0;
         for (int i = 0; i < 9; i++)
             if (this.tiles[i] != 0)
@@ -140,10 +141,12 @@ class TicTacToeBoard{
      * @return 'X' for player 1. 'O' for player 2. ' ' Otherwise
      */
     private char getTileMark(int tile){
-        if (this.tiles[tile] == 1)
-            return 'X';
-        else if (this.tiles[tile] == -1)
-            return 'O';
+        switch(this.tiles[tile]){
+            case 1:
+                return 'X';
+            case -1:
+                return 'O';
+        }
         return ' ';
     }
 }

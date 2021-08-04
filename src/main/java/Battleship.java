@@ -14,7 +14,6 @@ public class Battleship {
             // Request input
             do {
                 System.out.println("Please enter x coordinate:");
-                my_scanner.hasNext();
                 if (my_scanner.hasNextInt())
                     input_x = my_scanner.nextInt();
                 else
@@ -23,7 +22,6 @@ public class Battleship {
             } while(input_x < 1 || input_x > 8);
             do {
                 System.out.println("Please enter y coordinate:");
-                my_scanner.hasNext();
                 if (my_scanner.hasNextInt())
                     input_y = my_scanner.nextInt();
                 else
@@ -81,21 +79,20 @@ class BattleshipBoard{
             new_y = rand.nextInt(this.rows - 1);
             vertical = rand.nextBoolean();
             // Check if the area is available
-            if (placement_success)
-                for (int i = 0; i < ship_length; i++){
-                    if (vertical){
-                        if ((new_y + i) >= this.rows)
-                            placement_success = false;
-                        else if (this.ship_grid[new_x][new_y+i])
-                            placement_success = false;
-                    }
-                    else{
-                        if ((new_x + i) >= this.columns)
-                            placement_success = false;
-                        else if (this.ship_grid[new_x+i][new_y])
-                            placement_success = false;
-                    }
+            for (int i = 0; i < ship_length; i++){
+                if (vertical){
+                    if ((new_y + i) >= this.rows)
+                        placement_success = false;
+                    else if (this.ship_grid[new_x][new_y+i])
+                        placement_success = false;
                 }
+                else{
+                    if ((new_x + i) >= this.columns)
+                        placement_success = false;
+                    else if (this.ship_grid[new_x+i][new_y])
+                        placement_success = false;
+                }
+            }
         }while(!placement_success);
         // Create ship
         this.my_ships[index] = new Ship(new_x, new_y, vertical, ship_length);
@@ -167,7 +164,7 @@ class BattleshipBoard{
     }
 
     public void outputBoard(){
-        StringBuilder print_line = new StringBuilder();
+        StringBuilder print_line;
         for (int j = this.rows - 1; j > -1; j--){
             print_line = new StringBuilder();
             for (int i = 0; i < this.columns; i++){print_line.append(this.slotChar(i,j));}

@@ -9,12 +9,10 @@ public class ConnectFour{
         var columns = 7;
         var connect_n = 4;
         System.out.println("Would you like custom settings? (Y/N)");
-        my_scanner.hasNext(); // Block for input
         input = my_scanner.nextLine();
         if (input.equals("Y")) {
             do {
-                System.out.println("How many tiles do you want to connect? (Default 4)");
-                my_scanner.hasNext();
+                System.out.println("How many tiles do you want to connect to win? (Default 4)");
                 if (my_scanner.hasNextInt())
                     connect_n = my_scanner.nextInt();
                 else
@@ -25,25 +23,23 @@ public class ConnectFour{
             } while(connect_n <= 2);
             do {
                 System.out.println("How many rows do you want? (Default 6)");
-                my_scanner.hasNext();
                 if (my_scanner.hasNextInt())
                     rows = my_scanner.nextInt();
                 else
                     rows = 6;
                 my_scanner.nextLine();
                 if (rows < connect_n)
-                    System.out.println("Rows must be <= connection.");
+                    System.out.println("Rows must be >= connection.");
             }while(rows < connect_n);
             do {
                 System.out.println("How many columns do you want? (Default 7)");
-                my_scanner.hasNext();
                 if (my_scanner.hasNextInt())
                     columns = my_scanner.nextInt();
                 else
                     columns = 7;
                 my_scanner.nextLine();
                 if (columns < connect_n)
-                    System.out.println("Columns must be <= connection.");
+                    System.out.println("Columns must be >= connection.");
             } while(columns < connect_n);
         }
 
