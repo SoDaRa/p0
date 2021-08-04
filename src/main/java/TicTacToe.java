@@ -21,7 +21,7 @@ public class TicTacToe{
                         break;
                     }
                     else
-                        System.out.println("Player 1: Please enter a valid tile");
+                        System.out.println("That tile is unavailable. Please enter another.");
                 }
                 // Throw out garbage
                 else
@@ -40,7 +40,7 @@ public class TicTacToe{
                         break;
                     }
                     else
-                        System.out.println("Player 2: Please enter a valid tile");
+                        System.out.println("That tile is unavailable. Please enter another.");
                 }
                 else
                     my_scanner.next();
