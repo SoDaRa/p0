@@ -45,8 +45,7 @@ public class ConnectFour{
 
         // Create Board
         ConnectFourBoard my_board = new ConnectFourBoard(rows, columns, connect_n);
-        my_board.outputBoard();
-        my_board.outputGuide();
+        my_board.learnBoard();
         System.out.println();
 
         // Main Loop
@@ -376,7 +375,8 @@ class ConnectFourBoard{
     /**
      * Outputs numbers to help illustrate which numbers correspond to which columns
      */
-    public void outputGuide(){
+    public void learnBoard(){
+        this.outputBoard();
         for (int i = 1; i <= this.columns; i++)
             System.out.print(i + " ");
     }

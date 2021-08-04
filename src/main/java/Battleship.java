@@ -29,11 +29,12 @@ public class Battleship {
                 my_scanner.nextLine();
             } while(input_y < 1 || input_y > 8);
             var shot_result = my_board.shoot(input_x - 1, input_y - 1);
-            if (shot_result)
+            if (shot_result && my_board.checkWin() == 0)
                 my_board.outputBoard();
             else
                 System.out.println("Invalid Shot. Please try again.");
         }
+        my_board.finalBoard();
         var result = my_board.checkWin();
         if (result == 1)
             System.out.println("You Win!!");
@@ -236,6 +237,36 @@ class BattleshipBoard{
             var temp = j + 1;
             print_line.append(" ");
             print_line.append(temp);
+            System.out.println(print_line);
+        }
+    }
+
+    /**
+     * Same as slotChar but for after the game is over.
+     * @param x The column to print
+     * @param y The row to print
+     * @return String representation of point
+     */
+    private String endSlotChar(int x, int y){
+        // Successful Hit
+        if (this.ship_grid[x][y] == this.shot_tiles[x][y] && this.ship_grid[x][y])
+            return "X ";
+        // Missed shot
+        if (this.shot_tiles[x][y])
+            return "O ";
+        if (this.ship_grid[x][y])
+            return "S ";
+        return ". ";
+    }
+
+    /**
+     * Outputs the board with all the ships visible
+     */
+    public void finalBoard(){
+        StringBuilder print_line;
+        for (int j = this.rows - 1; j > -1; j--){
+            print_line = new StringBuilder();
+            for (int i = 0; i < this.columns; i++){print_line.append(this.endSlotChar(i,j));}
             System.out.println(print_line);
         }
     }
