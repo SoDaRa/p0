@@ -3,8 +3,8 @@ public class TicTacToe{
     public static void main(String[] args) {
         TicTacToeBoard myBoard = new TicTacToeBoard();
         Scanner my_scanner = new Scanner(System.in);
-        int result = 0;
-        int selection = -1;
+        int result;
+        int selection;
         TicTacToeBoard.learnBoard();
         // Main game loop
         while (myBoard.checkWin() == 0){
@@ -110,30 +110,29 @@ class TicTacToeBoard{
      * Outputs the board to the screen
      */
     public void outputBoard(){
-        StringBuilder printline = new StringBuilder();
+        StringBuilder print_line = new StringBuilder();
         for (int i = 0; i < 3; i++){
-            printline.append(this.getTileMark(i));
+            print_line.append(this.getTileMark(i));
             if (i<2)
-                printline.append('|');
+                print_line.append('|');
         }
-        System.out.println(printline);
+        System.out.println(print_line);
         System.out.println("-----");
-        printline.delete(0,5);
+        print_line.delete(0,5);
         for(int i = 3; i < 6; i++){
-            printline.append(this.getTileMark(i));
+            print_line.append(this.getTileMark(i));
             if (i<5)
-                printline.append('|');
+                print_line.append('|');
         }
-        System.out.println(printline);
+        System.out.println(print_line);
         System.out.println("-----");
-        printline.delete(0,5);
+        print_line.delete(0,5);
         for(int i = 6; i < 9; i++){
-            printline.append(this.getTileMark(i));
+            print_line.append(this.getTileMark(i));
             if (i<8)
-                printline.append('|');
+                print_line.append('|');
         }
-        System.out.println(printline);
-        return;
+        System.out.println(print_line);
     }
     /**
      * Gets the character to use to represent a tile on the board

@@ -32,6 +32,11 @@ public class SmallGameBotCLI {
                     ConnectFour.main(new String[]{""});
                     logger.info("Exiting Connect 4");
                     break;
+                case "Battleship":
+                    logger.info("Entering Battleship");
+                    Battleship.main(new String[]{""});
+                    logger.info("Exiting Battleship");
+                    break;
                 case "quit":
                     continue_flag = false;
             }

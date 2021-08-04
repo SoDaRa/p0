@@ -55,7 +55,7 @@ public class ConnectFour{
             do{
                 System.out.println("Player 1: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
-            }while(!myBoard.addPiece(selection, 1));
+            }while(myBoard.addPiece(selection, 1));
             result = myBoard.checkWin(); // Updates board first if there's a win.
             myBoard.outputBoard();
             if (result != 0)
@@ -63,7 +63,7 @@ public class ConnectFour{
             do{
                 System.out.println("Player 2: Please select a column: ");
                 selection = my_scanner.nextInt() - 1;
-            }while(!myBoard.addPiece(selection, -1));
+            }while(myBoard.addPiece(selection, -1));
             result = myBoard.checkWin();
             myBoard.outputBoard();
         }
@@ -123,14 +123,14 @@ class ConnectFourBoard{
     public boolean addPiece(int x, int mark){
         // Prevent illegal access
         if (x < 0 || x >= this.columns)
-            return false;
+            return true;
         int y = this.getFirstEmpty(x);
-        // If can't find a spot, report it
+        // If it can't find a spot, report it
         if (y == -1){
-            return false;
+            return true;
         }
         this.slots[x][y] = mark;
-        return true;
+        return false;
     }
     /**
      * Returns the winner if one exists.
@@ -309,7 +309,7 @@ class ConnectFourBoard{
         // If we made it down here, then there is no winner this tile can see.
         // So instead return if there is no possible win on this tile.
         for (int k = 0; k < 4; k++)
-            if (this.check_again[x][y][k] == true)
+            if (this.check_again[x][y][k])
                 return 0;
         return -10;
     }
@@ -345,7 +345,6 @@ class ConnectFourBoard{
             System.out.println(print_line);
             print_line.delete(0,this.columns*2);
         }
-        return;
     }
 
     public void outputGuide(){
