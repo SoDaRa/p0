@@ -75,21 +75,27 @@ class BattleshipBoard{
         boolean vertical;
         var placement_success = true;
         do{
+            // Assume true until false
             placement_success = true;
-            new_x = rand.nextInt(this.columns - ship_length);
-            new_y = rand.nextInt(this.rows - ship_length);
+            new_x = rand.nextInt(this.columns - 1);
+            new_y = rand.nextInt(this.rows - 1);
             vertical = rand.nextBoolean();
             // Check if the area is available
-            for (int i = 0; i < ship_length; i++){
-                if (vertical){
-                    if (this.ship_grid[new_x][new_y+i])
-                        placement_success = false;
+            if (placement_success)
+                for (int i = 0; i < ship_length; i++){
+                    if (vertical){
+                        if ((new_y + i) >= this.rows)
+                            placement_success = false;
+                        else if (this.ship_grid[new_x][new_y+i])
+                            placement_success = false;
+                    }
+                    else{
+                        if ((new_x + i) >= this.columns)
+                            placement_success = false;
+                        else if (this.ship_grid[new_x+i][new_y])
+                            placement_success = false;
+                    }
                 }
-                else{
-                    if (this.ship_grid[new_x+i][new_y])
-                        placement_success = false;
-                }
-            }
         }while(!placement_success);
         // Create ship
         this.my_ships[index] = new Ship(new_x, new_y, vertical, ship_length);
