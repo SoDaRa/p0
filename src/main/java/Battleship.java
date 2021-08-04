@@ -2,15 +2,15 @@ import java.util.Scanner;
 import java.util.Random;
 public class Battleship {
     public static void main(String[] args) {
-        BattleshipBoard myBoard = new BattleshipBoard(8, 8);
+        BattleshipBoard my_board = new BattleshipBoard(8, 8);
         Scanner my_scanner = new Scanner(System.in);
 
-        myBoard.learnBoard();
+        my_board.learnBoard();
         // Main loop
-        while (myBoard.checkWin() == 0){
+        while (my_board.checkWin() == 0){
             int input_x = -1;
             int input_y = -1;
-            System.out.println("Shots Remaining: " + myBoard.shots);
+            System.out.println("Shots Remaining: " + my_board.shots);
             // Request input
             do {
                 System.out.println("Please enter x coordinate:");
@@ -28,13 +28,13 @@ public class Battleship {
                     my_scanner.next();
                 my_scanner.nextLine();
             } while(input_y < 1 || input_y > 8);
-            var shot_result = myBoard.shoot(input_x - 1, input_y - 1);
+            var shot_result = my_board.shoot(input_x - 1, input_y - 1);
             if (shot_result)
-                myBoard.outputBoard();
+                my_board.outputBoard();
             else
                 System.out.println("Invalid Shot. Please try again.");
         }
-        var result = myBoard.checkWin();
+        var result = my_board.checkWin();
         if (result == 1)
             System.out.println("You Win!!");
         else
@@ -42,12 +42,18 @@ public class Battleship {
     }
 }
 class BattleshipBoard{
-    private boolean[][] shot_tiles; // 8 x 8 board
+    private final boolean[][] shot_tiles; // 8 x 8 board
     public int shots;
-    private int rows;
-    private int columns;
-    private Ship[] my_ships;
-    private boolean[][] ship_grid; // Helps compare with the shots_tiles to figure out things
+    private final int rows;
+    private final int columns;
+    private final Ship[] my_ships;
+    private final boolean[][] ship_grid; // Helps compare with the shots_tiles to figure out things
+
+    /**
+     * Creates a new battleship board
+     * @param rows How many rows the board has
+     * @param columns How many columns the board has
+     */
     public BattleshipBoard(int rows, int columns) {
         this.shot_tiles = new boolean[columns][rows];
         this.ship_grid = new boolean[columns][rows];
@@ -58,6 +64,24 @@ class BattleshipBoard{
         // Place ships
         for (int i = 0; i < 3; i++)
             this.placeShip(2+i, i);
+        this.shots = 24;
+    }
+
+    /**
+     * Alternate constructor for testing
+     * @param rows How many rows the board has
+     * @param columns How many columns the board has
+     * @param new_ships The ships to use
+     */
+    public BattleshipBoard(int rows, int columns, Ship[] new_ships){
+        this.shot_tiles = new boolean[columns][rows];
+        this.ship_grid = new boolean[columns][rows];
+        this.rows = rows;
+        this.columns = columns;
+        this.my_ships = new_ships;
+        for(Ship iter_ship : this.my_ships){
+            this.placeShip(iter_ship);
+        }
         this.shots = 24;
     }
 
@@ -106,6 +130,19 @@ class BattleshipBoard{
     }
 
     /**
+     * Alternate placeShip for testing
+     * @param new_ship The ship to place on the board
+     */
+    private void placeShip(Ship new_ship){
+        for (int i = 0; i < new_ship.length; i++){
+            if (new_ship.vert)
+                this.ship_grid[new_ship.x][new_ship.y+i] = true;
+            else
+                this.ship_grid[new_ship.x+i][new_ship.y] = true;
+        }
+    }
+
+    /**
      * Shoots a spot on the board and marks it as such.
      * @param x The shot's x
      * @param y The shot's y
@@ -113,7 +150,7 @@ class BattleshipBoard{
      */
     public boolean shoot(int x, int y){
         // Out of bounds shot
-        if ((x < 0 && x >= this.columns) || (y < 0 && y >= this.rows))
+        if (x < 0 || x >= this.columns || y < 0 || y >= this.rows)
             return false;
         // Already hit shot
         if (this.shot_tiles[x][y])
@@ -153,7 +190,7 @@ class BattleshipBoard{
         return 0;
     }
 
-    public String slotChar(int x, int y){
+    private String slotChar(int x, int y){
         // Successful Hit
         if (this.ship_grid[x][y] == this.shot_tiles[x][y] && this.ship_grid[x][y])
             return "X ";

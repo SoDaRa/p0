@@ -44,9 +44,9 @@ public class ConnectFour{
         }
 
         // Create Board
-        ConnectFourBoard myBoard = new ConnectFourBoard(rows, columns, connect_n);
-        myBoard.outputBoard();
-        myBoard.outputGuide();
+        ConnectFourBoard my_board = new ConnectFourBoard(rows, columns, connect_n);
+        my_board.outputBoard();
+        my_board.outputGuide();
         System.out.println();
 
         // Main Loop
@@ -55,7 +55,7 @@ public class ConnectFour{
             while(my_scanner.hasNext()){
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (myBoard.addPiece(selection, 1)) {// If we can claim selection
+                    if (my_board.addPiece(selection, 1)) {// If we can claim selection
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
                     }
@@ -66,8 +66,8 @@ public class ConnectFour{
                     System.out.println("Player 1: Please select a column: ");
                 }
             }
-            result = myBoard.checkWin(); // Updates board first if there's a win.
-            myBoard.outputBoard();
+            result = my_board.checkWin(); // Updates board first if there's a win.
+            my_board.outputBoard();
             if (result != 0)
                 break;
             System.out.println("Player 2: Please select a column: ");
@@ -75,7 +75,7 @@ public class ConnectFour{
 
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (myBoard.addPiece(selection, -1)) {// If we can claim selection
+                    if (my_board.addPiece(selection, -1)) {// If we can claim selection
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
                     }
@@ -86,8 +86,8 @@ public class ConnectFour{
                     System.out.println("Player 2: Please select a column: ");
                 }
             }
-            result = myBoard.checkWin();
-            myBoard.outputBoard();
+            result = my_board.checkWin();
+            my_board.outputBoard();
         }
         if (result == 2)
             System.out.println("Player 1 Wins!!");
@@ -97,6 +97,7 @@ public class ConnectFour{
             System.out.println("Draw!!");
     }
 }
+
 class ConnectFourBoard{
     private int rows;
     private int columns;
@@ -139,7 +140,7 @@ class ConnectFourBoard{
     /**
      * Marks a tile on the board to a player
      * @param x The column to update
-     * @param mark The player to mark the tile as
+     * @param mark The player to mark the tile as. 1 for player 1. -1 for player 2
      * @return True if successful. Otherwise False
      */
     public boolean addPiece(int x, int mark){

@@ -1,13 +1,13 @@
 import java.util.Scanner;
 public class TicTacToe{
     public static void main(String[] args) {
-        TicTacToeBoard myBoard = new TicTacToeBoard();
+        TicTacToeBoard my_board = new TicTacToeBoard();
         Scanner my_scanner = new Scanner(System.in);
         int result;
         int selection;
         TicTacToeBoard.learnBoard();
         // Main loop
-        while (myBoard.checkWin() == 0){
+        while (my_board.checkWin() == 0){
             // Player 1 Turn
               // Request input
             System.out.println("Player 1: Please select an open tile: ");
@@ -16,7 +16,7 @@ public class TicTacToe{
                 // Attempt to get an int
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (myBoard.markTile(selection, 1)) // If we can claim selection
+                    if (my_board.markTile(selection, 1)) // If we can claim selection
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
                 }
@@ -24,24 +24,24 @@ public class TicTacToe{
                 else
                     my_scanner.next();
             }
-            myBoard.outputBoard();
-            if (myBoard.checkWin() != 0)
+            my_board.outputBoard();
+            if (my_board.checkWin() != 0)
                 break;
             // Player 2 Turn
             System.out.println("Player 2: Please select an open tile: ");
             while (my_scanner.hasNext()) {
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (myBoard.markTile(selection, -1))
+                    if (my_board.markTile(selection, -1))
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
                 }
                 else
                     my_scanner.next();
             }
-            myBoard.outputBoard();
+            my_board.outputBoard();
         }
-        result = myBoard.checkWin();
+        result = my_board.checkWin();
         if (result == 1)
             System.out.println("Player 1 Wins!!");
         else if (result == -1)
