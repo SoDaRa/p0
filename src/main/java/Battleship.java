@@ -79,8 +79,8 @@ class BattleshipBoard{
         this.rows = rows;
         this.columns = columns;
         this.my_ships = new_ships;
-        for(Ship iter_ship : this.my_ships){
-            this.placeShip(iter_ship);
+        for(Ship new_ship : this.my_ships){
+            this.placeShip(new_ship);
         }
         this.shots = 24;
     }
@@ -193,7 +193,7 @@ class BattleshipBoard{
     /**
      * Returns the string to use for a spot on the board
      * @param x The column to print
-     * @param y The row it print
+     * @param y The row to print
      * @return String representation of point
      */
     private String slotChar(int x, int y){

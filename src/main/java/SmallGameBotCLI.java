@@ -1,16 +1,18 @@
 import java.util.Scanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 public class SmallGameBotCLI {
+    static Logger logger = Logger.getLogger(SmallGameBotCLI.class);
     /**
      * Runs the main games
      * @param args Currently Unused
      */
+
     public static void main(String[] args) {
+        DOMConfigurator.configure("log4j.xml");
         var continue_flag = true;
         Scanner my_scanner = new Scanner(System.in);
         String input;
-        Logger logger = LoggerFactory.getLogger(SmallGameBotCLI.class);
         logger.info("Starting Bot");
         System.out.println("Hello and thank you for running Small Name Bot.");
         // Main Loop
@@ -42,5 +44,6 @@ public class SmallGameBotCLI {
             }
         }
         System.out.println("Thanks for playing! Have a good one!");
+        logger.info("Shutting down bot");
     }
 }

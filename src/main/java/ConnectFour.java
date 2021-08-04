@@ -99,11 +99,11 @@ public class ConnectFour{
 }
 
 class ConnectFourBoard{
-    private int rows;
-    private int columns;
-    private int[][] slots;
-    private boolean[][][] check_again;
-    private int connect_n;
+    private final int rows;
+    private final int columns;
+    private final int[][] slots;
+    private final boolean[][][] check_again;
+    private final int connect_n;
 
     /**
      * Initializes the Board
@@ -251,7 +251,7 @@ class ConnectFourBoard{
                     has_p1 = true;
                 else if(this.slots[x][y+j] == -1)
                     has_p2 = true;
-                // Since there can't be any more vertically
+                // Since there can't be anymore vertically
                 else if (this.slots[x][y] == 0)
                     break;
             }

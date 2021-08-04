@@ -6,8 +6,9 @@ public class TicTacToeBoardTest {
         TicTacToeBoard myBoard = new TicTacToeBoard();
         assertTrue(myBoard.markTile(1, 1));
         assertFalse(myBoard.markTile(1, -1));
-        assertFalse(myBoard.markTile(-1, 0));
-        assertFalse(myBoard.markTile(20, 0));
+        assertFalse(myBoard.markTile(-1, -1));
+        assertFalse(myBoard.markTile(20, 1));
+        assertTrue(myBoard.markTile(5, -1));
     }
     @Test
     public void testCheckWin() {

@@ -16,9 +16,12 @@ public class TicTacToe{
                 // Attempt to get an int
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (my_board.markTile(selection, 1)) // If we can claim selection
+                    if (my_board.markTile(selection, 1)) {// If we can claim selection
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
+                    }
+                    else
+                        System.out.println("Player 1: Please enter a valid tile");
                 }
                 // Throw out garbage
                 else
@@ -32,9 +35,12 @@ public class TicTacToe{
             while (my_scanner.hasNext()) {
                 if (my_scanner.hasNextInt()) {
                     selection = my_scanner.nextInt() - 1;
-                    if (my_board.markTile(selection, -1))
+                    if (my_board.markTile(selection, -1)) {
                         my_scanner.nextLine(); // Discard any malicious input
                         break;
+                    }
+                    else
+                        System.out.println("Player 2: Please enter a valid tile");
                 }
                 else
                     my_scanner.next();
@@ -52,7 +58,7 @@ public class TicTacToe{
 
 }
 class TicTacToeBoard{
-    private int[] tiles = {0,0,0,0,0,0,0,0,0};
+    private final int[] tiles = {0,0,0,0,0,0,0,0,0};
 
     /**
      * Shorthand for checking if a tile is already marked or not
