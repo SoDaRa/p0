@@ -43,23 +43,49 @@ public class ConnectFour{
             } while(columns < connect_n);
         }
 
+        // Create Board
         ConnectFourBoard myBoard = new ConnectFourBoard(rows, columns, connect_n);
         myBoard.outputBoard();
         myBoard.outputGuide();
         System.out.println();
+
+        // Main Loop
         while (result == 0){
-            do{
-                System.out.println("Player 1: Please select a column: ");
-                selection = my_scanner.nextInt() - 1;
-            }while(myBoard.addPiece(selection, 1));
+            System.out.println("Player 1: Please select a column: ");
+            while(my_scanner.hasNext()){
+                if (my_scanner.hasNextInt()) {
+                    selection = my_scanner.nextInt() - 1;
+                    if (myBoard.addPiece(selection, 1)) {// If we can claim selection
+                        my_scanner.nextLine(); // Discard any malicious input
+                        break;
+                    }
+                    System.out.println("Player 1: Please select a valid column: ");
+                }
+                else {
+                    my_scanner.next();
+                    System.out.println("Player 1: Please select a column: ");
+                }
+            }
             result = myBoard.checkWin(); // Updates board first if there's a win.
             myBoard.outputBoard();
             if (result != 0)
                 break;
-            do{
-                System.out.println("Player 2: Please select a column: ");
-                selection = my_scanner.nextInt() - 1;
-            }while(myBoard.addPiece(selection, -1));
+            System.out.println("Player 2: Please select a column: ");
+            while(my_scanner.hasNext()){
+
+                if (my_scanner.hasNextInt()) {
+                    selection = my_scanner.nextInt() - 1;
+                    if (myBoard.addPiece(selection, -1)) {// If we can claim selection
+                        my_scanner.nextLine(); // Discard any malicious input
+                        break;
+                    }
+                    System.out.println("Player 2: Please select a valid column: ");
+                }
+                else {
+                    my_scanner.next();
+                    System.out.println("Player 2: Please select a column: ");
+                }
+            }
             result = myBoard.checkWin();
             myBoard.outputBoard();
         }
@@ -72,11 +98,11 @@ public class ConnectFour{
     }
 }
 class ConnectFourBoard{
-    int rows;
-    int columns;
-    int[][] slots;
-    boolean[][][] check_again;
-    int connect_n;
+    private int rows;
+    private int columns;
+    private int[][] slots;
+    private boolean[][][] check_again;
+    private int connect_n;
     /**
      * Initializes the Board
      * @param rows The Y height of the board
@@ -119,14 +145,14 @@ class ConnectFourBoard{
     public boolean addPiece(int x, int mark){
         // Prevent illegal access
         if (x < 0 || x >= this.columns)
-            return true;
+            return false;
         int y = this.getFirstEmpty(x);
         // If it can't find a spot, report it
         if (y == -1){
-            return true;
+            return false;
         }
         this.slots[x][y] = mark;
-        return false;
+        return true;
     }
     /**
      * Returns the winner if one exists.

@@ -6,7 +6,7 @@ public class Battleship {
         Scanner my_scanner = new Scanner(System.in);
 
         myBoard.learnBoard();
-        // Main game loop
+        // Main loop
         while (myBoard.checkWin() == 0){
             int input_x = -1;
             int input_y = -1;
@@ -42,12 +42,12 @@ public class Battleship {
     }
 }
 class BattleshipBoard{
-    boolean[][] shot_tiles; // 8 x 8 board
+    private boolean[][] shot_tiles; // 8 x 8 board
     public int shots;
-    int rows;
-    int columns;
-    Ship[] my_ships;
-    boolean[][] ship_grid; // Helps compare with the shots_tiles to figure out things
+    private int rows;
+    private int columns;
+    private Ship[] my_ships;
+    private boolean[][] ship_grid; // Helps compare with the shots_tiles to figure out things
     public BattleshipBoard(int rows, int columns) {
         this.shot_tiles = new boolean[columns][rows];
         this.ship_grid = new boolean[columns][rows];

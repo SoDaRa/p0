@@ -6,7 +6,7 @@ public class TicTacToe{
         int result;
         int selection;
         TicTacToeBoard.learnBoard();
-        // Main game loop
+        // Main loop
         while (myBoard.checkWin() == 0){
             // Player 1 Turn
               // Request input
@@ -52,7 +52,7 @@ public class TicTacToe{
 
 }
 class TicTacToeBoard{
-    int[] tiles = {0,0,0,0,0,0,0,0,0};
+    private int[] tiles = {0,0,0,0,0,0,0,0,0};
     private boolean checkTileEmpty(int tile){
         return this.tiles[tile] == 0;
     }
