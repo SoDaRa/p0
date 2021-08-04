@@ -104,6 +104,7 @@ class ConnectFourBoard{
     private int[][] slots;
     private boolean[][][] check_again;
     private int connect_n;
+
     /**
      * Initializes the Board
      * @param rows The Y height of the board
@@ -137,6 +138,7 @@ class ConnectFourBoard{
         }
         return -1;
     }
+
     /**
      * Marks a tile on the board to a player
      * @param x The column to update
@@ -155,6 +157,7 @@ class ConnectFourBoard{
         this.slots[x][y] = mark;
         return true;
     }
+
     /**
      * Returns the winner if one exists.
      * @return 2 for player 1, -2 for player 2 and 0 for no winner yet, and -10 draw
@@ -370,6 +373,9 @@ class ConnectFourBoard{
         }
     }
 
+    /**
+     * Outputs numbers to help illustrate which numbers correspond to which columns
+     */
     public void outputGuide(){
         for (int i = 1; i <= this.columns; i++)
             System.out.print(i + " ");

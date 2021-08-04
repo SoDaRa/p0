@@ -190,6 +190,12 @@ class BattleshipBoard{
         return 0;
     }
 
+    /**
+     * Returns the string to use for a spot on the board
+     * @param x The column to print
+     * @param y The row it print
+     * @return String representation of point
+     */
     private String slotChar(int x, int y){
         // Successful Hit
         if (this.ship_grid[x][y] == this.shot_tiles[x][y] && this.ship_grid[x][y])
@@ -200,6 +206,9 @@ class BattleshipBoard{
         return ". ";
     }
 
+    /**
+     * Outputs the current state of the board
+     */
     public void outputBoard(){
         StringBuilder print_line;
         for (int j = this.rows - 1; j > -1; j--){
@@ -208,6 +217,10 @@ class BattleshipBoard{
             System.out.println(print_line);
         }
     }
+
+    /**
+     * Outputs the board with numbers to help inform coordinates.
+     */
     public void learnBoard(){
         StringBuilder print_line = new StringBuilder();
         // Top row
@@ -296,6 +309,10 @@ class Ship{
         }
         return 0;
     }
+
+    /**
+     * Checks if the ship's alive status has changed when a segment is hit.
+     */
     private void updateStatus(){
         var count = 0;
         for (int i = 0; i < this.length; i++)

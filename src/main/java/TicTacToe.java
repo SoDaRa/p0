@@ -53,9 +53,16 @@ public class TicTacToe{
 }
 class TicTacToeBoard{
     private int[] tiles = {0,0,0,0,0,0,0,0,0};
-    private boolean checkTileEmpty(int tile){
-        return this.tiles[tile] == 0;
+
+    /**
+     * Shorthand for checking if a tile is already marked or not
+     * @param tile The tile to check
+     * @return True if player is using that spot. False otherwise
+     */
+    private boolean checkTileUsed(int tile){
+        return this.tiles[tile] != 0;
     }
+
     /**
      * Marks a tile on the board to a player
      * @param tile The tile to update
@@ -63,11 +70,12 @@ class TicTacToeBoard{
      * @return True if successful. Otherwise False
      */
     public boolean markTile(int tile, int mark){
-        if (tile < 0 || tile > 8 || !this.checkTileEmpty(tile))
+        if (tile < 0 || tile > 8 || this.checkTileUsed(tile))
             return false;
         this.tiles[tile] = mark;
         return true;
     }
+
     /**
      * Returns the winner if one exists. 
      * @return 1 for X, -1 for O, 0 for no winner yet and -10 for draw
@@ -75,28 +83,29 @@ class TicTacToeBoard{
     public int checkWin(){
         // Vertical check
         for (int i = 0; i < 8; i=i+3){
-            if (this.tiles[i] != 0 && this.tiles[i] == this.tiles[i+1] && this.tiles[i] == this.tiles[i+2])
+            if (this.checkTileUsed(i) && this.tiles[i] == this.tiles[i+1] && this.tiles[i] == this.tiles[i+2])
                 return this.tiles[i];
         }
         // Horizontal Check
         for (int i = 0; i < 3; i++){
-            if (this.tiles[i] != 0 && this.tiles[i] == this.tiles[i+3] && this.tiles[i] == this.tiles[i+6])
+            if (this.checkTileUsed(i) && this.tiles[i] == this.tiles[i+3] && this.tiles[i] == this.tiles[i+6])
                 return this.tiles[i];
         }
         // Diagonals
-        if (this.tiles[0] != 0 && this.tiles[0] == this.tiles[4] && this.tiles[0] == this.tiles[8])
+        if (this.checkTileUsed(0) && this.tiles[0] == this.tiles[4] && this.tiles[0] == this.tiles[8])
             return this.tiles[0];
-        if (this.tiles[2] != 0 && this.tiles[2] == this.tiles[4] && this.tiles[2] == this.tiles[6])
+        if (this.checkTileUsed(2) && this.tiles[2] == this.tiles[4] && this.tiles[2] == this.tiles[6])
             return this.tiles[2];
         // Draw detection
         int marked_count = 0;
         for (int i = 0; i < 9; i++)
-            if (this.tiles[i] != 0)
+            if (this.checkTileUsed(i))
                 marked_count += 1;
         if (marked_count == 9)
             return -10;
         return 0;
     }
+
     /**
      * Outputs a version of the board with each tile labeled
      */
@@ -107,6 +116,7 @@ class TicTacToeBoard{
         System.out.println("-----");
         System.out.println("7|8|9");
     }
+
     /**
      * Outputs the board to the screen
      */
@@ -135,6 +145,7 @@ class TicTacToeBoard{
         }
         System.out.println(print_line);
     }
+
     /**
      * Gets the character to use to represent a tile on the board
      * @param tile The tile to get the character of
