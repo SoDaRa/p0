@@ -5,3 +5,21 @@
 2021-08-04 14:38:31 INFO  SmallGameBotCLI:33 - Entering Connect 4
 2021-08-04 14:39:20 INFO  SmallGameBotCLI:16 - Starting Bot
 2021-08-04 14:39:24 INFO  SmallGameBotCLI:26 - Entering Tic Tac Toe
+2021-08-04 16:12:41 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 16:12:48 INFO  SmallGameBotCLI:33 - Entering Connect 4
+2021-08-04 16:13:21 INFO  SmallGameBotCLI:35 - Exiting Connect 4
+2021-08-04 16:13:26 INFO  SmallGameBotCLI:47 - Shutting down bot
+2021-08-04 16:45:05 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 16:45:13 INFO  SmallGameBotCLI:47 - Shutting down bot
+2021-08-04 17:08:25 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 17:08:30 INFO  SmallGameBotCLI:47 - Shutting down bot
+2021-08-04 17:15:49 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 17:15:53 INFO  SmallGameBotCLI:38 - Entering Battleship
+2021-08-04 17:56:12 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 17:56:15 INFO  SmallGameBotCLI:47 - Shutting down bot
+2021-08-04 18:13:12 INFO  SmallGameBotCLI:16 - Starting Bot
+2021-08-04 18:13:17 INFO  SmallGameBotCLI:26 - Entering Tic Tac Toe
+2021-08-04 18:14:01 INFO  SmallGameBotCLI:28 - Exiting Tic Tac Toe
+2021-08-04 18:14:10 INFO  SmallGameBotCLI:33 - Entering Connect 4
+2021-08-04 18:14:36 INFO  SmallGameBotCLI:35 - Exiting Connect 4
+2021-08-04 18:14:44 INFO  SmallGameBotCLI:38 - Entering Battleship
